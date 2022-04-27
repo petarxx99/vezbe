@@ -1,0 +1,39 @@
+
+int unsignedIntToStr(unsigned int broj, char* str){
+
+  if (broj == 0){
+
+        *str = 0x30;
+        *(str + 1) = 0;
+
+        return 1;
+  }
+
+  int brojCifara = 0;
+
+  unsigned int brojCopy = broj;
+
+  while (brojCopy != 0){
+
+      brojCifara++;
+
+      brojCopy /= 10;
+  }
+
+
+  brojCopy = broj;
+
+
+  for(int i=0; i<brojCifara; i++){
+
+      *(str + brojCifara-1 - i) = brojCopy % 10 + 0x30;
+
+      brojCopy /= 10;
+  }
+
+
+  str[brojCifara] = 0;
+
+  return brojCifara;
+
+}
