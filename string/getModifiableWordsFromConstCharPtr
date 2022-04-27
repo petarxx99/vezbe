@@ -1,0 +1,73 @@
+
+char* addSpaceInTheEnd(const char* string){
+    
+    int length = strlen(string);
+    char* newString = malloc(length + 2);
+    strcpy(newString, string);
+    newString[length] = SPACE;
+    newString[length+1] = 0;
+    return newString;
+}
+
+
+void spaceToNull(char* string){
+    int length = strlen(string);
+    string[length] = 0;
+}
+
+int* getSpaces(const char* stringToParse, int* ptrNumOfSpaces){
+    int numOfSpaces = 0;
+    int i=0;
+    int* positions = (int*) malloc(10 * sizeof(int));
+
+    while(stringToParse[i] > 0){
+        if(stringToParse[i] == SPACE){
+            if(numOfSpaces % 10 == 0){
+                positions = realloc(positions, sizeof(int) * (numOfSpaces + 10));
+            }
+            positions[numOfSpaces] = i;
+            numOfSpaces++;
+        }
+        i++;
+    }
+    *ptrNumOfSpaces = numOfSpaces;
+    return positions;
+}
+
+char** breakStringApart(const char* stringToParse, int* positions, int numOfSpaces){
+    char** result = (char**)malloc(numOfSpaces * sizeof(char*));
+
+    result[0] = (char*) malloc(positions[0] + 1);
+    memcpy(result[0], stringToParse, positions[0]);
+    result[0][positions[0]] = 0;
+
+    for(int i=0; i<numOfSpaces-1; i++){
+        int numOfBytes = positions[i+1] - positions[i];
+        result[i+1] = (char*)malloc(numOfBytes);
+        memcpy(result[i+1], stringToParse + positions[i] + 1, numOfBytes-1);
+        result[i+1][numOfBytes-1] = 0;
+    }
+
+    int numOfBytesForLastString = strlen(stringToParse) - positions[numOfSpaces-1];
+    result[numOfSpaces] = malloc(numOfBytesForLastString);
+    memcpy(result[numOfSpaces], stringToParse + positions[numOfSpaces-1]+1, numOfBytesForLastString-1);
+    result[numOfSpaces][numOfBytesForLastString-1] = 0;
+    return result;
+}
+
+
+char** getWords(const char* stringToParse){
+
+    int numOfSpaces = 0;   
+
+    int *positions = getSpaces(stringToParse, &numOfSpaces); 
+    char** words = breakStringApart(stringToParse, positions, numOfSpaces);   
+    
+    for(int i=0; i<numOfSpaces; i++){
+        spaceToNull(words[i]);
+    }
+
+    return words;
+}
+
+
