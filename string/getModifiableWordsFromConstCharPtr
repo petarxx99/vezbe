@@ -1,3 +1,7 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
 const int SPACE=32;
 
 char* addSpaceInTheEnd(const char* string){
