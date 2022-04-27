@@ -1,3 +1,4 @@
+const int SPACE=32;
 
 char* addSpaceInTheEnd(const char* string){
     
