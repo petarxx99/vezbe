@@ -59,9 +59,9 @@ Ova metoda vraca najvecu listu koja pocinje iz svakog elementa. */
             ArrayList<Integer> list = new ArrayList<>();
             list.add(niz[i]);
             
-            ArrayList grane = new ArrayList();
-            grane.add(list);
-            listaGrana.add(grane);
+            ArrayList graneElementaNiza = new ArrayList();
+            graneElementaNiza.add(list);
+            listaGrana.add(graneElementaNiza);
 
 /* Nek radi za n+1, svakom nizu ubacujem novi element ako novi element nastaljva rastuci niz.
 -1 zato sto je poslednja grana (lista) dodata u kodu iznad. */
