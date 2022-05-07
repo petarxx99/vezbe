@@ -4,25 +4,37 @@ import java.util.*;
 public class Mainclass {
     public static void main(String[] args){
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Pokrecem program. Koliko brojeva zelite da upisete: ");
-        int duzina = scanner.nextInt();
-        System.out.printf("Upisite %d brojeva: ", duzina);
-        int[] niz = new int[duzina];
-        for(int i=0; i<duzina; i++){
-            niz[i] = scanner.nextInt();
-        }
+        System.out.println("Pokrecem program. Koliko brojeva zelite da upisete. Write how many numbers your array will have: ");
+        int duzinaNiza = scanner.nextInt();
+        System.out.printf("Upisite %d brojeva. Write your array: ", duzinaNiza);
+        int[] niz = preuzmiNiz(duzinaNiza, scanner);
         System.out.println("Upisali ste brojeve. ");
 
-        ArrayList liste = napraviListe(niz);
-        int indeksNajveceListe = najvecaLista(liste);
-        ArrayList najvecaLista = (ArrayList) liste.get(indeksNajveceListe);
+        ArrayList najveciRastuciNiz = najveciRastuciNiz(niz);
 
-        System.out.println("Broj elemenata = " + najvecaLista.size());
-        System.out.println(najvecaLista);
+        System.out.println("Broj elemenata = " + najveciRastuciNiz.size());
+        System.out.println("Najveci rastuci niz (the biggest growing array within the array): " + najveciRastuciNiz);
+    }
+
+    public static int[] preuzmiNiz(int duzinaNiza, Scanner scanner){
+        int[] niz = new int[duzinaNiza];
+        for(int i=0; i<duzinaNiza; i++){
+            niz[i] = scanner.nextInt();
+        }
+        return niz;
+    }
+
+
+    
+    public static ArrayList najveciRastuciNiz(int[] niz){
+        ArrayList najduzaListaSvakogElementa = najduzeListeIzSvakogElementa(niz);
+        int indeksNajduzeListe = indeksNajveceListe(najduzaListaSvakogElementa);
+        ArrayList<Integer> najvecaLista = (ArrayList<Integer>) najduzaListaSvakogElementa.get(indeksNajduzeListe);
+        return najvecaLista;
     }
 
 /* Ova funkcija uzima listu nizova (tj. listu ArrayList-i) i vraca indeks najduze liste. */
-    public static int najvecaLista(ArrayList listaNizova){
+    public static int indeksNajveceListe(ArrayList listaNizova){
         int max = 0;
         for(int i=1; i<listaNizova.size(); i++){
             ArrayList listaI = (ArrayList) listaNizova.get(i);
@@ -34,13 +46,14 @@ public class Mainclass {
         return max;
     }
 
+
+
 /*Matematicka indukcija najobicnija, nek radi za n+1 i nek radi za prvi slucaj. 
 ,,Grane" su razlicite liste. graneElementa su liste koje pocinju od istog elementa.
 Ova metoda vraca najvecu listu koja pocinje iz svakog elementa. */
-    public static ArrayList napraviListe(int niz[]){
+    public static ArrayList najduzeListeIzSvakogElementa(int niz[]){
         ArrayList listaGrana = new ArrayList();
-        ArrayList listaNizova = new ArrayList();
-       
+               
         for(int i=0; i<niz.length; i++){
             /* Nek radi za prvi slucaj (a i za n+1) */
             ArrayList<Integer> list = new ArrayList<>();
@@ -58,9 +71,10 @@ Ova metoda vraca najvecu listu koja pocinje iz svakog elementa. */
             }
         }
 
+        ArrayList listaNizova = new ArrayList();
         for(int i=0; i<listaGrana.size(); i++){
             ArrayList graneElementa =  (ArrayList) listaGrana.get(i);
-            int indeksNajveceGrane = najvecaLista(graneElementa);
+            int indeksNajveceGrane = indeksNajveceListe(graneElementa);
             listaNizova.add(graneElementa.get(indeksNajveceGrane));
         }
         return listaNizova;
