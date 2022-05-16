@@ -12,6 +12,8 @@ public class BazaPodataka {
     private String adresaServera;
     private int portServera;
 
+    public static int  NISTA_ZA_UPDATE=-1, NEISPRAVNE_GODINE=-2,  NEISPRAVNI_DOHODAK=-3, SQL_EXCEPTION=-4;
+
     public BazaPodataka(String imeBaze, String adresaServera, int portServera, String username, String lozinka){
         this.imeBaze = imeBaze;
         this.adresaServera = adresaServera;
@@ -24,17 +26,8 @@ public class BazaPodataka {
     public int ubaciteZaposlenogUBazu(Zaposleni zaposleni, String imeTabele){
         String sql = String.format("INSERT INTO %s (ime, godine, adresa, visina_dohotka) VALUES ('%s', %s, '%s', %s);", imeTabele, zaposleni.getIme(), zaposleni.getGodine(), zaposleni.getAdresa(), String.valueOf(zaposleni.getVisinaDohotka()));
         try(Connection connection = DriverManager.getConnection(stringZaKonekciju)){
-            PreparedStatement st = connection.prepareStatement("INSERT INTO ? (ime, godine, adresa, visina_dohotka) VALUES (?, ?, ?, ?);");
-            st.setString(1, imeTabele);
-            st.setString(2, "'" + zaposleni.getIme() + "'");
-            st.setString(3, String.valueOf(zaposleni.getGodine()));
-            st.setString(4, "'" + zaposleni.getAdresa() + "'");
-            st.setString(5, String.valueOf(zaposleni.getVisinaDohotka()));
-
-            Statement statement = connection.createStatement();
-            System.out.println("SQL: " + sql);
-            if (1==1) return statement.executeUpdate(sql);
-            return st.executeUpdate();
+            Statement st = connection.createStatement();
+            return st.executeUpdate(sql);
         } catch(SQLException e){
             e.printStackTrace();
             return -1;
@@ -86,51 +79,49 @@ public class BazaPodataka {
         }
     }
 
-    public int izmeniImeZaposlenog(int id, String ime, String imeTabele){
-        String sql = String.format("UPDATE %s set ime='%s' WHERE id=%d;", imeTabele, ime, id);
+
+    public int update(int id, String ime, String godineString, String adresa, String visinaDohotkaString, String imeTabele){
+        if (ime==null && godineString==null && adresa==null && visinaDohotkaString==null) return NISTA_ZA_UPDATE;
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("UPDATE " + imeTabele + " SET ");
+
+        if(ime != null){
+            sb.append("ime="+ "'" + ime + "'");
+        }
+
+        if(adresa != null) {
+            sb.append(", adresa=" + "'" + adresa + "'");
+        }
+
+        if(godineString!=null) {
+            try {
+                int godine = Integer.parseInt(godineString);
+                if (godine < 0) return NEISPRAVNE_GODINE;
+                sb.append(", godine=" + godine);
+            } catch (Exception e) {
+                return NEISPRAVNE_GODINE;
+            }
+        }
+
+        try{
+            BigDecimal visinaDohotka = new BigDecimal(visinaDohotkaString);
+            sb.append(", visina_dohotka=" + visinaDohotka);
+        } catch(Exception e){
+            return NEISPRAVNI_DOHODAK;
+        }
+        sb.append(";");
 
         try(Connection connection = DriverManager.getConnection(stringZaKonekciju)){
             Statement st = connection.createStatement();
-            return st.executeUpdate(sql);
+            return st.executeUpdate(sb.toString());
         } catch(SQLException e){
             e.printStackTrace();
-            return -1;
+            return SQL_EXCEPTION;
         }
     }
 
-    public int izmeniGodineZaposlenog(int id, int godine, String imeTabele){
-        String sql = String.format("UPDATE %s set godine=%d WHERE id=%d;", imeTabele, godine, id);
 
-        try(Connection connection = DriverManager.getConnection(stringZaKonekciju)){
-            Statement st = connection.createStatement();
-            return st.executeUpdate(sql);
-        } catch(SQLException e){
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
-    public int izmeniAdresuZaposlenog(int id, String adresa, String imeTabele){
-        String sql = String.format("UPDATE %s SET adresa='%s' WHERE id=%d;", imeTabele, adresa, id);
-        try(Connection connection = DriverManager.getConnection(stringZaKonekciju)){
-            Statement st = connection.createStatement();
-            return st.executeUpdate(sql);
-        } catch(SQLException e){
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
-    public int izmeniVisinuDohotkaZaposlenog(int id, BigDecimal dohodak, String imeTabele){
-        String sql = String.format("UPDATE %s SET visina_dohotka=%s WHERE id=%s;", imeTabele, dohodak, id);
-        try(Connection connection = DriverManager.getConnection(stringZaKonekciju)){
-            Statement st = connection.createStatement();
-            return st.executeUpdate(sql);
-        } catch(SQLException e){
-            e.printStackTrace();
-            return -1;
-        }
-    }
 
 
 }
