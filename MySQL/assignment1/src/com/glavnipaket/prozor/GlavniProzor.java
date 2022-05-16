@@ -28,18 +28,18 @@ public class GlavniProzor extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.setLayout(new GridLayout(2, 1));
-        JPanel panelPrikaz = new JPanel(new FlowLayout());
+        JPanel panelPrikaz = new JPanel();
 
         textArea = new JTextArea(10, 50);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        panelPrikaz.add(scrollPane);
+        panelPrikaz.add(scrollPane, BorderLayout.CENTER);
         this.getContentPane().add(panelPrikaz);
 
 
-        JPanel panelIzbor = new JPanel(new GridLayout(5, 1));
+        JPanel panelIzbor = new JPanel(new GridLayout(6, 1));
         JButton dugmeUnosNovog = new JButton("Unesite novog zaposlenog");
         dugmeUnosNovog.addActionListener(this::unesiZaposlenog);
         panelIzbor.add(dugmeUnosNovog);
@@ -60,6 +60,8 @@ public class GlavniProzor extends JFrame {
         dugmePretraga.addActionListener(this::pretraziZaposlene);
         panelIzbor.add(dugmePretraga);
 
+        JButton dugmeObrisi = new JButton("Obrisite tekst.");
+        dugmePretraga.addActionListener((ActionEvent event) -> {textArea.setText("");});
         this.getContentPane().add(panelIzbor);
         this.setVisible(true);
     }
@@ -157,6 +159,7 @@ public class GlavniProzor extends JFrame {
              try{
                  Zaposleni zaposleni = new Zaposleni(ime, godine, adresa, visinaDohotka);
                  baza.ubaciteZaposlenogUBazu(zaposleni, imeTabele);
+                 this.setEnabled(true);
                  f.dispose();
              } catch(Exception e){
                  e.printStackTrace();
@@ -194,6 +197,10 @@ public class GlavniProzor extends JFrame {
         JTextField tf = new JTextField(10);
         JButton dugme= new JButton("Izbrisi zaposlenog.");
 
+        f.getContentPane().add(labela);
+        f.getContentPane().add(tf);
+        f.getContentPane().add(dugme);
+
         dugme.addActionListener((ActionEvent e1) -> {
             int id=-1;
             try{
@@ -204,6 +211,7 @@ public class GlavniProzor extends JFrame {
 
             try{
                 baza.izbrisiteZaposlenog(id, imeTabele);
+                this.setEnabled(true);
                 f.dispose();
             } catch(Exception e){
                 e.printStackTrace();
@@ -241,4 +249,5 @@ public class GlavniProzor extends JFrame {
     }
 
 }
+
 
