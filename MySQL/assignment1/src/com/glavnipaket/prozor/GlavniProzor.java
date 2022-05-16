@@ -30,7 +30,8 @@ public class GlavniProzor extends JFrame {
         this.setLayout(new GridLayout(2, 1));
         JPanel panelPrikaz = new JPanel();
 
-        textArea = new JTextArea(10, 50);
+        textArea = new JTextArea(10, 30);
+        textArea.setText("OVDE SU REZULTATI PRETRAGE");
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         JScrollPane scrollPane = new JScrollPane(textArea);
@@ -60,8 +61,10 @@ public class GlavniProzor extends JFrame {
         dugmePretraga.addActionListener(this::pretraziZaposlene);
         panelIzbor.add(dugmePretraga);
 
-        JButton dugmeObrisi = new JButton("Obrisite tekst.");
-        dugmePretraga.addActionListener((ActionEvent event) -> {textArea.setText("");});
+        JButton dugmeObrisi = new JButton("Obrisite tekst");
+        dugmeObrisi.addActionListener((ActionEvent event) -> {textArea.setText("OVDE SU REZULTATI PRETRAGE");});
+        panelIzbor.add(dugmeObrisi);
+
         this.getContentPane().add(panelIzbor);
         this.setVisible(true);
     }
@@ -119,42 +122,18 @@ public class GlavniProzor extends JFrame {
         f.getContentPane().add(dugme, BorderLayout.PAGE_END);
         dugme.addActionListener((ActionEvent e1) -> {
              String ime = tfIme.getText();
-             if (ime.isEmpty() || ime.isBlank()){
-                 JOptionPane.showMessageDialog(null, "Morate uneti ime zaposlenog.");
-                 return;
-             }
-
              String adresa = tfAdresa.getText();
-             if(adresa.isEmpty() || adresa.isBlank()){
-                 JOptionPane.showMessageDialog(null, "Morate uneti adresu.");
-                 return;
-             }
 
-             int godine=-1;
-             try{
-                 godine = Integer.parseInt(tfGodine.getText());
-             } catch(Exception e){
-                 JOptionPane.showMessageDialog(null, "Niste uneli broj kako treba.");
-                 return;
-             }
+             int godine= preuzmiGodine(tfGodine);
              if(godine<0){
                  JOptionPane.showMessageDialog(null, "Nesto sa unosom godina nije proslo kako treba, jeste li uneli pozitivan broj?");
                  return;
              }
-
-             BigDecimal visinaDohotka;
-             try{
-                 double visinaDohotkaDouble = Double.parseDouble(tfVisinaDohotka.getText());
-                 visinaDohotka = new BigDecimal(visinaDohotkaDouble);
-             } catch(Exception e){
-                 JOptionPane.showMessageDialog(null, "Niste uneli visinu dohotka kako treba.");
-                 return;
-             }
+             BigDecimal visinaDohotka = preuzmiVisinuDohotka(tfVisinaDohotka);
              if (visinaDohotka == null){
                  JOptionPane.showMessageDialog(null, "Obrada visine dohotka nije prosla kako treba.");
                  return;
              }
-
 
              try{
                  Zaposleni zaposleni = new Zaposleni(ime, godine, adresa, visinaDohotka);
@@ -168,7 +147,6 @@ public class GlavniProzor extends JFrame {
 
         });
 
-
         f.getContentPane().add(panelPodaci, BorderLayout.CENTER);
         f.setVisible(true);
     }
@@ -177,10 +155,88 @@ public class GlavniProzor extends JFrame {
 
 
 
-
     public void izmeniNaOsnovuId(ActionEvent event){
         JFrame f = napraviSporedniProzor(duzina, visina);
+        JLabel labelObavestenja = new JLabel("Menjace se samo polja koja stiklirate.");
+        f.getContentPane().add(labelObavestenja, BorderLayout.PAGE_START);
 
+        JPanel panelPodaci = new JPanel(new GridLayout(5, 3));
+
+        JLabel labelId = new JLabel("Upisite id zaposlenog cije podatke menjate: ");
+        panelPodaci.add(labelId);
+        JTextField tfId = new JTextField(10);
+        panelPodaci.add(tfId);
+        JLabel labelPrazan = new JLabel();
+        panelPodaci.add(labelPrazan);
+
+
+        JLabel labelIme = new JLabel("ime i prezime: ");
+        panelPodaci.add(labelIme);
+        JTextField tfIme = new JTextField();
+        panelPodaci.add(tfIme);
+        JCheckBox checkBoxIme = new JCheckBox();
+        panelPodaci.add(checkBoxIme);
+
+
+        JLabel labelGodine = new JLabel("godine: ");
+        panelPodaci.add(labelGodine);
+        JTextField tfGodine = new JTextField();
+        panelPodaci.add(tfGodine);
+        JCheckBox checkBoxGodine = new JCheckBox();
+        panelPodaci.add(checkBoxGodine);
+
+        JLabel labelAdresa = new JLabel("adresa: ");
+        panelPodaci.add(labelAdresa);
+        JTextField tfAdresa = new JTextField();
+        panelPodaci.add(tfAdresa);
+        JCheckBox checkBoxAdresa = new JCheckBox();
+        panelPodaci.add(checkBoxAdresa);
+
+        JLabel labelVisinaDohotka = new JLabel("visina dohotka");
+        panelPodaci.add(labelVisinaDohotka);
+        JTextField tfVisinaDohotka = new JTextField();
+        panelPodaci.add(tfVisinaDohotka);
+        JCheckBox checkBoxVisinaDohotka = new JCheckBox();
+        panelPodaci.add(checkBoxVisinaDohotka);
+
+        f.getContentPane().add(panelPodaci, BorderLayout.CENTER);
+
+        JButton dugmeIzmeni = new JButton("Izmeni.");
+        dugmeIzmeni.addActionListener((ActionEvent e1) -> {
+            int id=-1;
+            try{
+                id = Integer.parseInt(tfId.getText());
+            } catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Niste upisali dobar id.");
+                return;
+            }
+
+            String ime=null, godine=null, adresa=null, visinaDohotka=null;
+            if (checkBoxIme.isSelected()){
+                ime = tfIme.getText();
+            }
+
+            if(checkBoxGodine.isSelected()){
+                godine = tfGodine.getText();
+            }
+
+            if(checkBoxAdresa.isSelected()){
+                adresa = tfAdresa.getText();
+            }
+
+            if(checkBoxVisinaDohotka.isSelected()){
+                visinaDohotka = tfVisinaDohotka.getText();
+            }
+
+            int brojPromenjenihRedova = baza.update(id, ime, godine, adresa, visinaDohotka, imeTabele);
+            if(brojPromenjenihRedova>0) {
+                this.setEnabled(true);
+                f.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Neuspeo upit.");
+            }
+        });
+        f.getContentPane().add(dugmeIzmeni, BorderLayout.PAGE_END);
         f.setVisible(true);
     }
 
@@ -207,6 +263,7 @@ public class GlavniProzor extends JFrame {
                 id = Integer.parseInt(tf.getText());
             } catch(Exception e){
                 JOptionPane.showMessageDialog(null, "Niste uneli ispravan broj.");
+                return;
             }
 
             try{
@@ -230,14 +287,6 @@ public class GlavniProzor extends JFrame {
         ispisiZaposlene(baza.prikaziSveZaposlene(imeTabele));
     }
 
-
-    public void pretraziZaposlene(ActionEvent event){
-        JFrame f = napraviSporedniProzor(duzina, visina);
-
-        f.setVisible(true);
-    }
-
-
     public void ispisiZaposlene(ArrayList<Zaposleni> zaposleni){
         StringBuilder sb = new StringBuilder();
         for(int i=0; i<zaposleni.size(); i++){
@@ -248,6 +297,54 @@ public class GlavniProzor extends JFrame {
         textArea.setText(sb.toString());
     }
 
-}
 
+    public void pretraziZaposlene(ActionEvent event){
+        JFrame f = napraviSporedniProzor(duzina, visina);
+
+
+        f.setVisible(true);
+    }
+
+
+
+
+
+    public int preuzmiGodine(JTextField tfGodine){
+        int godine=-1;
+        try{
+            godine = Integer.parseInt(tfGodine.getText());
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Niste uneli broj kako treba.");
+            return -1;
+        }
+        if(godine<0){
+            JOptionPane.showMessageDialog(null, "Nesto sa unosom godina nije proslo kako treba, jeste li uneli pozitivan broj?");
+            return -1;
+        }
+
+        return godine;
+    }
+
+    public BigDecimal preuzmiVisinuDohotka(JTextField tfVisinaDohotka){
+        BigDecimal visinaDohotka;
+        try{
+            double visinaDohotkaDouble = Double.parseDouble(tfVisinaDohotka.getText());
+            visinaDohotka = new BigDecimal(visinaDohotkaDouble);
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Niste uneli visinu dohotka kako treba.");
+            return null;
+        }
+        if (visinaDohotka == null){
+            JOptionPane.showMessageDialog(null, "Obrada visine dohotka nije prosla kako treba.");
+            return null;
+        }
+
+
+        return visinaDohotka;
+    }
+
+
+
+
+}
 
