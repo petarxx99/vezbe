@@ -72,7 +72,7 @@ public class BazaPodataka {
 
 
     public int izbrisiteZaposlenog(int id, String imeTabele){
-        String sql = String.format("DELETE FROM %s WHERE id=%s", imeTabele, id);
+        String sql = String.format("DELETE FROM %s WHERE id=%s;", imeTabele, id);
         try(Connection connection = DriverManager.getConnection(stringZaKonekciju)){
             Statement st = connection.createStatement();
             return st.executeUpdate(sql);
@@ -89,22 +89,21 @@ public class BazaPodataka {
             return NISTA_ZA_UPDATE;
         }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("UPDATE " + imeTabele + " SET ");
+        ArrayList<String> updejti = new ArrayList<>();
 
         if(ime != null){
-            sb.append("ime="+ "'" + ime + "'");
+            updejti.add("ime="+ "'" + ime + "'");
         }
 
         if(adresa != null) {
-            sb.append(", adresa=" + "'" + adresa + "'");
+            updejti.add("adresa=" + "'" + adresa + "'");
         }
 
         if(godineString!=null) {
             try {
                 int godine = Integer.parseInt(godineString);
                 if (godine < 0) return NEISPRAVNE_GODINE;
-                sb.append(", godine=" + godine);
+                updejti.add("godine=" + godine);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Neispravne godine.");
                 return NEISPRAVNE_GODINE;
@@ -114,12 +113,21 @@ public class BazaPodataka {
         if(visinaDohotkaString!=null){
             try{
                 BigDecimal visinaDohotka = new BigDecimal(visinaDohotkaString);
-                sb.append(", visina_dohotka=" + visinaDohotka);
+                updejti.add("visina_dohotka=" + visinaDohotka);
             } catch(Exception e){
                 JOptionPane.showMessageDialog(null, "Neispravni dohodak");
                 return NEISPRAVNI_DOHODAK;
             }
         }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("UPDATE " + imeTabele + " SET ");
+        sb.append(updejti.get(0));
+        for(int i=1; i<updejti.size(); i++){
+            sb.append(", ");
+            sb.append(updejti.get(i));
+        }
+        sb.append(" WHERE id=" + id);
         sb.append(";");
 
         try(Connection connection = DriverManager.getConnection(stringZaKonekciju)){
