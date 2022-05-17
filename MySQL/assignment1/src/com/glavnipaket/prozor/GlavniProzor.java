@@ -18,12 +18,23 @@ public class GlavniProzor extends JFrame {
     private JTextArea textArea;
     private BazaPodataka baza;
     private String imeTabele;
+    private int maxDuzinaImena;
+    private int maxDuzinaAdrese;
+    private int[] prePosleZapeteDohodak;
+    private String maxDohodak;
+    private String ddlOgranicenjaTabeleZaposleni;
 
-    public GlavniProzor(int duzina, int visina, BazaPodataka baza, String imeTabele){
+    public GlavniProzor(int duzina, int visina, BazaPodataka baza, String imeTabele, int maxDuzinaImena, int maxDuzinaAdrese, int[] prePosleZapeteDohodak){
         this.duzina = duzina;
         this.visina = visina;
         this.baza = baza;
         this.imeTabele = imeTabele;
+        this.maxDuzinaImena = maxDuzinaImena;
+        this.maxDuzinaAdrese = maxDuzinaAdrese;
+        this.prePosleZapeteDohodak = prePosleZapeteDohodak;
+        this.maxDohodak = "Za dohodak moze najvise da se upise " + prePosleZapeteDohodak[0] + " cifre pre zapete i " + prePosleZapeteDohodak[1] + " cifre posle zapete.";
+        this.ddlOgranicenjaTabeleZaposleni = String.format("Ime moze najvise %s karaktera, adresa moze najvise %s karaktera, %s", maxDuzinaImena, maxDuzinaAdrese, maxDohodak);
+
 
         this.setSize(duzina, visina);
         this.setLocationRelativeTo(null);
@@ -97,8 +108,8 @@ public class GlavniProzor extends JFrame {
 
     public void unesiZaposlenog(ActionEvent event){
         JFrame f = napraviSporedniProzor(duzina, visina);
-        JLabel labelObavestenjeKarakteri = new JLabel("Ime i adresa do 50 karaktera.");
-        f.getContentPane().add(labelObavestenjeKarakteri, BorderLayout.PAGE_START);
+        JScrollPane scrollPaneObavestenja = napraviScrollPaneObavestenja();
+        f.getContentPane().add(scrollPaneObavestenja, BorderLayout.PAGE_START);
         JPanel panelPodaci = new JPanel(new GridLayout(4, 2));
         
         JLabel labelaIme = new JLabel("ime i prezime: ");
@@ -121,7 +132,17 @@ public class GlavniProzor extends JFrame {
         f.getContentPane().add(dugme, BorderLayout.PAGE_END);
         dugme.addActionListener((ActionEvent e1) -> {
              String ime = tfIme.getText();
+            if(ime.length() > maxDuzinaImena){
+                JOptionPane.showMessageDialog(null, "Ime moze biti najvise " + maxDuzinaImena + " slova");
+                return;
+            }
+
              String adresa = tfAdresa.getText();
+            if(adresa.length() > maxDuzinaAdrese){
+                JOptionPane.showMessageDialog(null, "Adresa moze biti najvise " + maxDuzinaAdrese + " slova");
+                return;
+            }
+
 
              int godine= preuzmiGodine(tfGodine);
              if(godine<0){
@@ -156,11 +177,8 @@ public class GlavniProzor extends JFrame {
 
     public void izmeniNaOsnovuId(ActionEvent event){
         JFrame f = napraviSporedniProzor(duzina, visina);
-        JPanel panelTop = new JPanel(new GridLayout(2, 1));
-        JLabel labelObavestenja = new JLabel("Menjace se samo polja koja stiklirate.");
-        JLabel labelKarakteri = new JLabel("Ime i adresa do 50 karaktera.");
-        staviKomponenteNaPanel(panelTop, new JComponent[]{labelObavestenja, labelKarakteri});
-        f.getContentPane().add(panelTop, BorderLayout.PAGE_START);
+        JScrollPane scrollPaneObavestenja = napraviScrollPaneObavestenja();
+        f.getContentPane().add(scrollPaneObavestenja, BorderLayout.PAGE_START);
 
         JPanel panelPodaci = new JPanel(new GridLayout(5, 3));
 
@@ -206,14 +224,22 @@ public class GlavniProzor extends JFrame {
             String ime=null, godine=null, adresa=null, visinaDohotka=null;
             if (checkBoxIme.isSelected()){
                 ime = tfIme.getText();
-            }
-
-            if(checkBoxGodine.isSelected()){
-                godine = tfGodine.getText();
+                if(ime.length() > maxDuzinaImena){
+                    JOptionPane.showMessageDialog(null, "Ime moze biti najduze " + maxDuzinaImena + " karaktera.");
+                    return;
+                }
             }
 
             if(checkBoxAdresa.isSelected()){
                 adresa = tfAdresa.getText();
+                if(adresa.length() > maxDuzinaAdrese){
+                    JOptionPane.showMessageDialog(null, "Adresa moze biti najduze " + maxDuzinaAdrese + " karaktera.");
+                    return;
+                }
+            }
+
+            if(checkBoxGodine.isSelected()){
+                godine = tfGodine.getText();
             }
 
             if(checkBoxVisinaDohotka.isSelected()){
@@ -459,6 +485,16 @@ public class GlavniProzor extends JFrame {
 
 
         return visinaDohotka;
+    }
+
+    public JScrollPane napraviScrollPaneObavestenja(){
+        JTextArea ta = new JTextArea(ddlOgranicenjaTabeleZaposleni);
+        ta.setLineWrap(true);
+        ta.setWrapStyleWord(true);
+        ta.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(ta);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        return scrollPane;
     }
 
 
