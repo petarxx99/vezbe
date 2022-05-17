@@ -1,5 +1,6 @@
 package com.glavnipaket;
 
+import javax.swing.*;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
@@ -83,7 +84,10 @@ public class BazaPodataka {
 
 
     public int update(int id, String ime, String godineString, String adresa, String visinaDohotkaString, String imeTabele){
-        if (ime==null && godineString==null && adresa==null && visinaDohotkaString==null) return NISTA_ZA_UPDATE;
+        if (ime==null && godineString==null && adresa==null && visinaDohotkaString==null) {
+            JOptionPane.showMessageDialog(null, "Niste stiklirali nista.");
+            return NISTA_ZA_UPDATE;
+        }
 
         StringBuilder sb = new StringBuilder();
         sb.append("UPDATE " + imeTabele + " SET ");
@@ -102,15 +106,19 @@ public class BazaPodataka {
                 if (godine < 0) return NEISPRAVNE_GODINE;
                 sb.append(", godine=" + godine);
             } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Neispravne godine.");
                 return NEISPRAVNE_GODINE;
             }
         }
 
-        try{
-            BigDecimal visinaDohotka = new BigDecimal(visinaDohotkaString);
-            sb.append(", visina_dohotka=" + visinaDohotka);
-        } catch(Exception e){
-            return NEISPRAVNI_DOHODAK;
+        if(visinaDohotkaString!=null){
+            try{
+                BigDecimal visinaDohotka = new BigDecimal(visinaDohotkaString);
+                sb.append(", visina_dohotka=" + visinaDohotka);
+            } catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Neispravni dohodak");
+                return NEISPRAVNI_DOHODAK;
+            }
         }
         sb.append(";");
 
