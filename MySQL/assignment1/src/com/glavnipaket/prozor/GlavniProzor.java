@@ -3,6 +3,8 @@ import com.glavnipaket.BazaPodataka;
 import com.glavnipaket.Zaposleni;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -31,7 +33,6 @@ public class GlavniProzor extends JFrame {
         JPanel panelPrikaz = new JPanel();
 
         textArea = new JTextArea(10, 30);
-        textArea.setText("OVDE SU REZULTATI PRETRAGE");
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         JScrollPane scrollPane = new JScrollPane(textArea);
@@ -62,7 +63,7 @@ public class GlavniProzor extends JFrame {
         panelIzbor.add(dugmePretraga);
 
         JButton dugmeObrisi = new JButton("Obrisite tekst");
-        dugmeObrisi.addActionListener((ActionEvent event) -> {textArea.setText("OVDE SU REZULTATI PRETRAGE");});
+        dugmeObrisi.addActionListener((ActionEvent event) -> {textArea.setText("");});
         panelIzbor.add(dugmeObrisi);
 
         this.getContentPane().add(panelIzbor);
@@ -77,6 +78,7 @@ public class GlavniProzor extends JFrame {
             @Override
             public void windowClosing(WindowEvent e1){
                 thisProzor.setEnabled(true);
+                f.dispose();
             }
         });
 
@@ -95,27 +97,24 @@ public class GlavniProzor extends JFrame {
 
     public void unesiZaposlenog(ActionEvent event){
         JFrame f = napraviSporedniProzor(duzina, visina);
+        JLabel labelObavestenjeKarakteri = new JLabel("Ime i adresa do 50 karaktera.");
+        f.getContentPane().add(labelObavestenjeKarakteri, BorderLayout.PAGE_START);
         JPanel panelPodaci = new JPanel(new GridLayout(4, 2));
         
         JLabel labelaIme = new JLabel("ime i prezime: ");
-        panelPodaci.add(labelaIme);
         JTextField tfIme = new JTextField();
-        panelPodaci.add(tfIme);
         
         JLabel labelaGodine = new JLabel("godine zaposlenog: ");
-        panelPodaci.add(labelaGodine);
         JTextField tfGodine = new JTextField();
-        panelPodaci.add(tfGodine);
+
         
         JLabel labelaAdresa = new JLabel("adresa: ");
-        panelPodaci.add(labelaAdresa);
         JTextField tfAdresa = new JTextField();
-        panelPodaci.add(tfAdresa);
+
         
         JLabel labelaVisinaDohotka = new JLabel("visina dohotka: ");
-        panelPodaci.add(labelaVisinaDohotka);
         JTextField tfVisinaDohotka = new JTextField();
-        panelPodaci.add(tfVisinaDohotka);
+        staviKomponenteNaPanel(panelPodaci, new JComponent[]{labelaIme, tfIme, labelaGodine, tfGodine, labelaAdresa, tfAdresa, labelaVisinaDohotka, tfVisinaDohotka});
 
 
         JButton dugme = new JButton("Unesi u bazu.");
@@ -157,47 +156,40 @@ public class GlavniProzor extends JFrame {
 
     public void izmeniNaOsnovuId(ActionEvent event){
         JFrame f = napraviSporedniProzor(duzina, visina);
+        JPanel panelTop = new JPanel(new GridLayout(2, 1));
         JLabel labelObavestenja = new JLabel("Menjace se samo polja koja stiklirate.");
-        f.getContentPane().add(labelObavestenja, BorderLayout.PAGE_START);
+        JLabel labelKarakteri = new JLabel("Ime i adresa do 50 karaktera.");
+        staviKomponenteNaPanel(panelTop, new JComponent[]{labelObavestenja, labelKarakteri});
+        f.getContentPane().add(panelTop, BorderLayout.PAGE_START);
 
         JPanel panelPodaci = new JPanel(new GridLayout(5, 3));
 
-        JLabel labelId = new JLabel("Upisite id zaposlenog cije podatke menjate: ");
-        panelPodaci.add(labelId);
+        JLabel labelId = new JLabel("id cije podatke menjate: ");
         JTextField tfId = new JTextField(10);
-        panelPodaci.add(tfId);
         JLabel labelPrazan = new JLabel();
-        panelPodaci.add(labelPrazan);
+        staviKomponenteNaPanel(panelPodaci, new JComponent[]{labelId, tfId, labelPrazan});
 
 
         JLabel labelIme = new JLabel("ime i prezime: ");
-        panelPodaci.add(labelIme);
         JTextField tfIme = new JTextField();
-        panelPodaci.add(tfIme);
         JCheckBox checkBoxIme = new JCheckBox();
-        panelPodaci.add(checkBoxIme);
+        staviKomponenteNaPanel(panelPodaci, new JComponent[]{labelIme, tfIme, checkBoxIme});
 
 
         JLabel labelGodine = new JLabel("godine: ");
-        panelPodaci.add(labelGodine);
         JTextField tfGodine = new JTextField();
-        panelPodaci.add(tfGodine);
         JCheckBox checkBoxGodine = new JCheckBox();
-        panelPodaci.add(checkBoxGodine);
+        staviKomponenteNaPanel(panelPodaci, new JComponent[]{labelGodine, tfGodine, checkBoxGodine});
 
         JLabel labelAdresa = new JLabel("adresa: ");
-        panelPodaci.add(labelAdresa);
         JTextField tfAdresa = new JTextField();
-        panelPodaci.add(tfAdresa);
         JCheckBox checkBoxAdresa = new JCheckBox();
-        panelPodaci.add(checkBoxAdresa);
+        staviKomponenteNaPanel(panelPodaci, new JComponent[]{labelAdresa, tfAdresa, checkBoxAdresa});
 
         JLabel labelVisinaDohotka = new JLabel("visina dohotka");
-        panelPodaci.add(labelVisinaDohotka);
         JTextField tfVisinaDohotka = new JTextField();
-        panelPodaci.add(tfVisinaDohotka);
         JCheckBox checkBoxVisinaDohotka = new JCheckBox();
-        panelPodaci.add(checkBoxVisinaDohotka);
+        staviKomponenteNaPanel(panelPodaci, new JComponent[]{labelVisinaDohotka, tfVisinaDohotka, checkBoxVisinaDohotka});
 
         f.getContentPane().add(panelPodaci, BorderLayout.CENTER);
 
@@ -300,13 +292,139 @@ public class GlavniProzor extends JFrame {
 
     public void pretraziZaposlene(ActionEvent event){
         JFrame f = napraviSporedniProzor(duzina, visina);
+        JLabel label = new JLabel("Stiklirajte polja po poljima vrsite pretragu.");
+        f.getContentPane().add(label, BorderLayout.PAGE_START);
 
 
+        JPanel panelPodaci = new JPanel(new GridLayout(4, 1));
+        JPanel panelIme = new JPanel(new FlowLayout());
+        
+        JLabel labelIme = new JLabel("ime: ");
+        JTextField tfIme = new JTextField(10);
+        JCheckBox checkBoxIme = new JCheckBox();
+        staviKomponenteNaPanel(panelIme, new JComponent[]{labelIme, tfIme, checkBoxIme});
+        panelPodaci.add(panelIme);
+
+        final int MIN = 0;
+        final int MAX = 1;
+
+        final int MAX_GODINE = 200;
+        final int MIN_GODINE = 1;
+        int[] minMaxGodine = new int[2];
+        minMaxGodine[MIN] = MIN_GODINE;
+        minMaxGodine[MAX] = MAX_GODINE;
+
+        JPanel panelGodine = new JPanel(new FlowLayout());
+        JLabel labelGodine = new JLabel("godine od: ");
+        JSpinner spinnerMinGodine = napraviNumberSpinner(MIN_GODINE, MAX_GODINE, 1, MIN_GODINE);
+        JLabel godineDo = new JLabel("godine do: ");
+        JSpinner spinnerMaxGodine = napraviNumberSpinner(MIN_GODINE, MAX_GODINE, 1, MAX_GODINE);
+        JCheckBox checkBoxGodine = new JCheckBox();
+
+        staviKomponenteNaPanel(panelGodine, new JComponent[]{labelGodine, spinnerMinGodine, godineDo, spinnerMaxGodine, checkBoxGodine});
+        panelPodaci.add(panelGodine);
+
+        JPanel panelAdresa = new JPanel(new FlowLayout());
+        JLabel labelAdresa = new JLabel("adresa: ");
+        JTextField tfAdresa = new JTextField(10);
+        JCheckBox checkBoxAdresa = new JCheckBox();
+        staviKomponenteNaPanel(panelAdresa, new JComponent[]{labelAdresa, tfAdresa, checkBoxAdresa});
+        panelPodaci.add(panelAdresa);
+
+        int MIN_DOHODAK = 0;
+        int MAX_DOHODAK = 1000000;
+        int[] minMaxDohodak = new int[2];
+        minMaxDohodak[MIN] = MIN_DOHODAK;
+        minMaxDohodak[MAX] = MAX_DOHODAK;
+
+        JPanel panelDohodak = new JPanel(new FlowLayout());
+        JLabel labelVisinaDohotkaOd = new JLabel("dohodak od: ");
+        JSpinner spinnerMinDohodak = napraviNumberSpinner(MIN_DOHODAK, MAX_DOHODAK, 10000, MIN_DOHODAK);
+        JLabel labelVisinaDohotkaDo = new JLabel("do: ");
+        JSpinner spinnerMaxDohodak = napraviNumberSpinner(MIN_DOHODAK, MAX_DOHODAK, 10000, 100000);
+        JCheckBox checkBoxDohodak = new JCheckBox();
+
+        staviKomponenteNaPanel(panelDohodak, new JComponent[]{labelVisinaDohotkaOd, spinnerMinDohodak, labelVisinaDohotkaDo, spinnerMaxDohodak, checkBoxDohodak});
+        panelPodaci.add(panelDohodak);
+
+        f.getContentPane().add(panelPodaci, BorderLayout.CENTER);
+
+        GlavniProzor thisProzor = this;
+        JButton dugme = new JButton("Pretrazite");
+        f.getContentPane().add(dugme, BorderLayout.PAGE_END);
+        dugme.addActionListener((ActionEvent e) -> {
+            String ime = null;
+            if(checkBoxIme.isSelected()){
+                ime = String.format("(ime='%s')", tfIme.getText());
+            }
+
+            String godine = null;
+            if(checkBoxGodine.isSelected()) {
+                int godineMin = (int) spinnerMinGodine.getValue();
+                int godineMax = (int) spinnerMaxGodine.getValue();
+                godine = String.format("(godine < %d) AND (godine > %d)", godineMax, godineMin);
+            }
+
+            String adresa = null;
+            if(checkBoxAdresa.isSelected()){
+                adresa = String.format("(adresa='%s')", tfAdresa.getText());
+            }
+
+            String dohodak = null;
+            if(checkBoxDohodak.isSelected()) {
+                int minDohodak = (int) spinnerMinDohodak.getValue();
+                int maxDohodak = (int) spinnerMaxDohodak.getValue();
+                dohodak = String.format("(visina_dohotka < %d) AND (visina_dohotka > %d)", maxDohodak, minDohodak);
+            }
+
+            String[] uslovi = new String[]{ime, godine, adresa, dohodak};
+            String uslov = napraviUslovOdStringovaKojiNisuNull(uslovi);
+            ArrayList<Zaposleni> zaposleni = baza.prikaziZaposlenePoUslovu(imeTabele, uslov);
+            if(zaposleni != null){
+                ispisiZaposlene(zaposleni);
+                thisProzor.setEnabled(true);
+                f.dispose();
+            }
+        });
         f.setVisible(true);
     }
 
 
 
+    public void staviKomponenteNaPanel(JPanel kontejner, JComponent[] komponente){
+        for(JComponent c : komponente){
+            kontejner.add(c);
+        }
+    }
+
+    public String napraviUslovOdStringovaKojiNisuNull(String[] uslovi){
+        StringBuilder sb = new StringBuilder();
+        sb.append("(1=1)");
+        for(int i=0; i<uslovi.length; i++){
+            if(uslovi[i] != null){
+                sb.append(" AND ");
+                sb.append(uslovi[i]);
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public JSpinner napraviNumberSpinner(int min, int max, int stepSize, int pocetnaVrednost){
+        SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel();
+        spinnerNumberModel.setMinimum(min);
+        spinnerNumberModel.setMaximum(max);
+        spinnerNumberModel.setStepSize(stepSize);
+        if(pocetnaVrednost>max){
+            spinnerNumberModel.setValue(max);
+        } else if (pocetnaVrednost < min){
+            spinnerNumberModel.setValue(min);
+        } else {
+            spinnerNumberModel.setValue(pocetnaVrednost);
+        }
+        
+        return new JSpinner(spinnerNumberModel);
+    }
 
 
     public int preuzmiGodine(JTextField tfGodine){
