@@ -1,0 +1,6 @@
+CREATE SCHEMA assignment_zaposleni;
+USE assignment_zaposleni;
+CREATE TABLE zaposleni (id int primary key auto_increment, ime varchar (50), godine int, adresa varchar(50), visina_dohotka decimal(12, 4));
+CREATE USER 'assignment_user'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL ON assignment_zaposleni.* TO 'assignment_user'@'localhost';
+
