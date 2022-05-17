@@ -68,6 +68,8 @@ public class BazaPodataka {
     }
 
 
+
+
     public int izbrisiteZaposlenog(int id, String imeTabele){
         String sql = String.format("DELETE FROM %s WHERE id=%s", imeTabele, id);
         try(Connection connection = DriverManager.getConnection(stringZaKonekciju)){
