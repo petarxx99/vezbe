@@ -59,8 +59,21 @@ indeksNajduzeListe promenljiva cuva indeks od koga pocinje najveci rastuci niz.
 
 
 /*
-Najbitniji korak je ovde. Za svaki novi element niza, kreiram listu grana koja odatle pocinje,
-zatim proveravam da li ovaj novi element niza formira nove grane koje pocinju od proslih elemenata niza.
+Najbitniji korak je ovde. 
+Za svaki novi element niza proveravam da li formira nove grane koje pocinju od proslih elemenata niza.
+Na primer, imam niz 0, 10, 1, 2.
+Kada dodjem do broja 10, broj 10 stvara novu granu prvom elementu niza (grana 0, 10).
+Kada dodjem do broja 1, broj jedan stvara novu granu prvom elementu niza (granu 0, 1). 
+Kada dodjem do broja 2, broj 2 stvara novu granu prvom elementu niza (granu 0, 1, 2).
+Broj 2 takodje stvara novu granu elementu niza 1 (granu 1, 2).
+
+Ova verzija programa ce stvoriti vise grana nego prethodna. Na primer, ova verzija ce posle obrade broja 10
+imati granu (0) i granu (0, 10). Prosla verzija to ne radi, prosla verzija kad obradjuje broj 10, ona bi 
+samo nadovezala broj 10 na granu (0), ne bi pravila novu granu (0, 10).
+Ako zelim da ova verzija ne pravi ove bespotrebne grane, na kraju fajla sam u komentar stavio kod kako treba da izgleda
+stvoriNoveGraneElementa metoda.
+
+Zatim kreiram listu grana koja pocinje od tog elemnta niza, tako da imam listu grana koja pocinje od svakog elementa niza.
 */
 
     public static ArrayList kreirajSveGraneSvihElemenata(int niz[]){
@@ -169,3 +182,28 @@ kako bi napravio novu granu kojoj je poslednji clan novi element u nizu. */
         return listaGrana;
     }
 }
+
+/*
+Ako ne zelim da imam bespotrebne grane, mogu da zamenim kod metode stvoriNoveGraneElementa ovim kodom.
+
+public static ArrayList stvoriNoveGraneElementa...
+
+ for(int i=0; i<graneElementa.size(); i++){
+            ArrayList<Integer> staraLista = (ArrayList<Integer>) graneElementa.get(i);
+            if (poslednjiElementStareListeJeManjiOdElementaNiza(staraLista, niz[indeksElementa])){
+            	staraLista.add(niz[indeksElementa]);
+            } else {
+            	ArrayList<Integer> novaGrana = eventualnoKreirajGranu(graneElementa, staraLista, niz, indeksElementa);
+            	noveGraneOvogElementa = dodajGranuAkoNijeNull(noveGraneOvogElementa, novaGrana);  
+            }
+        }
+      ...
+      
+pa bih onda imao metodu koja izgleda ovako
+public static boolean poslednjiElementStareListeJeManjiOdElementaNiza(ArrayList<Integer> staraLista, int elementNiza){
+		int indeksPoslednjegClanaListe = staraLista.size() - 1;
+		return (staraLista.get(indeksPoslednjegClanaListe) < elementNiza);
+	}
+      
+*/
+
