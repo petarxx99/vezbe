@@ -1,5 +1,16 @@
 import java.util.*;
 
+
+/*
+Zadatak je da se u nizu pronadje najveci rastuci niz. Npr. ako imamo niz {50, 2, 10, 5, 6} najveci rastuci niz je {2, 5, 6}.
+Zadatak sam resio tako sto od svakog elementa niza pocinjem grane (liste). Kada obradjujem novi element niza, u metodi koja se zove (ili se zvala 
+u vreme pisanja ovog komentara) obradiGranu proveravam da li je elementNiza veci od poslednjeg clana grane. 
+Ako jeste, onda stavljam taj element niza u granu. Ako nije, onda proveravam da li je element niza veci od nekih od prethodnih clanova grane. 
+Ako jeste, onda pravim novu granu (npr. kad dodjem do broja 5 pravim novu granu {2, 5}, jer je 5 manje od 10, pa ne moze da se nastavi predjasnja grana {2,10}).
+Zato iz svakog elementa ne pocinje lista brojeva, nego vise listi (tj. iz svakog elementa pocinje lista ArrayList-i). 
+Te liste sam nazvao grane, jer ovaj proces podseca na grananje.
+*/
+
 public class Mainclass {
     public static void main(String[] args){
         
