@@ -10,7 +10,6 @@ Ako jeste, onda pravim novu granu (npr. kad dodjem do broja 5 pravim novu granu 
 Zato iz svakog elementa ne pocinje lista brojeva, nego vise listi (tj. iz svakog elementa pocinje lista ArrayList-i). 
 Te liste sam nazvao grane, jer ovaj proces podseca na grananje.
 */
-
 public class Mainclass {
     public static void main(String[] args){
         
@@ -36,20 +35,18 @@ public class Mainclass {
     }
 
 
-    
+/* Uradio  */    
     public static ArrayList dajNajveciRastuciNiz(int[] niz){
     	ArrayList sveGraneSvihElemenata = dajGraneSvihElemenata(niz);
-        ArrayList najduzaListaSvakogElementa = dajNajduzeListeIzSvakogElementa(sveGraneSvihElemenata);
+        ArrayList najduzaListaSvakogElementa = dajNajduzuListuIzSvakogElementa(sveGraneSvihElemenata);
         return dajNajduzuGranu(najduzaListaSvakogElementa);
     }
 
 
-
-/*Matematicka indukcija najobicnija, nek radi za n+1 i nek radi za prvi slucaj. 
-,,Grane" su razlicite liste. graneElementa su liste koje pocinju od istog elementa.
-Ova metoda vraca najvecu listu koja pocinje iz svakog elementa. */
+/*
+Ova metoda vraca listu grana koje pocinje iz svakog elementa. */
     public static ArrayList dajGraneSvihElemenata(int niz[]){
-        ArrayList<ArrayList> graneSvihElemenata = new ArrayList<ArrayList>();
+        ArrayList<ArrayList> graneSvihElemenata = new ArrayList<>();
                
         for(int i=0; i<niz.length; i++){
             final int SLEDECI_ELEMENT_NIZA = niz[i];
@@ -95,7 +92,10 @@ Ova metoda vraca najvecu listu koja pocinje iz svakog elementa. */
         if(staraGrana.get(POSLEDNJI_INDEKS) < elementNiza){
             staraGrana.add(elementNiza);
         } else {
-            napraviNovuGranu(noveGrane, staraGrana, elementNiza);
+            ArrayList<Integer> novaGrana = napraviNovuGranu(staraGrana, elementNiza);
+            if(novaGrana != null){
+                noveGrane.add(novaGrana);
+            }
         }
     }
 
@@ -103,16 +103,17 @@ Ova metoda vraca najvecu listu koja pocinje iz svakog elementa. */
 kako bi napravio novu granu kojoj je poslednji clan novi element u nizu.
 +1 za kopiraj, zato sto npr. ako je nulti element manji od elemnta niza, treba da se kopira 1 element
 starog niza. Matematickom indukcijom sledi da je tacno i za sve ostale primere. */
-    public static void napraviNovuGranu(ArrayList graneNaKojeDodajem, ArrayList<Integer> staraGrana, int elementNiza){
-        int poslednjiIndeks = staraGrana.size() - 1;
-        for(int i = poslednjiIndeks; i>=0; i--){
+    public static ArrayList<Integer> napraviNovuGranu(ArrayList<Integer> staraGrana, int elementNiza){
+        final int POSLEDNJI_INDEKS = staraGrana.size() - 1;
+
+        for(int i = POSLEDNJI_INDEKS; i>=0; i--){
             if(staraGrana.get(i) < elementNiza){
                 ArrayList<Integer> novaGrana = kopiraj(staraGrana, i+1);
                 novaGrana.add(elementNiza);
-                graneNaKojeDodajem.add(novaGrana);
-                break;
+                return novaGrana;
             }
         }
+        return null;
     }
 
 /* Vracam kopiju ArrayList-a do odredjenog elementa. */
@@ -128,10 +129,9 @@ starog niza. Matematickom indukcijom sledi da je tacno i za sve ostale primere. 
         return result;
     }
 
-
-     public static ArrayList dajNajduzeListeIzSvakogElementa(ArrayList graneSvihElemenata){
+     public static ArrayList dajNajduzuListuIzSvakogElementa(ArrayList graneSvihElemenata){
         ArrayList listaNizova = new ArrayList();
-        ArrayList<ArrayList> sveGraneSvihElemenata = (ArrayList) graneSvihElemenata;
+        ArrayList<ArrayList> sveGraneSvihElemenata = (ArrayList<ArrayList>) graneSvihElemenata;
         
         sveGraneSvihElemenata.forEach(graneJednogElementa -> 
                         listaNizova.add(dajNajduzuGranu(graneJednogElementa)));
@@ -139,14 +139,8 @@ starog niza. Matematickom indukcijom sledi da je tacno i za sve ostale primere. 
         return listaNizova;
     }
 
-
-    public static ArrayList<Integer> dajNajduzuGranu(ArrayList graneElementa){
-        final int INDEKS_NAJVECE_GRANE = indeksNajveceListe(graneElementa);
-        return (ArrayList<Integer>) graneElementa.get(INDEKS_NAJVECE_GRANE);
-    }
-
-/* Ova funkcija uzima listu nizova (tj. listu ArrayList-i) i vraca indeks najduze liste. */
-    public static int indeksNajveceListe(ArrayList listaNizova){
+    /* max promenljiva cuva indeks najduze liste. */
+    public static ArrayList<Integer> dajNajduzuGranu(ArrayList listaNizova){
         int max = 0;
         for(int i=1; i<listaNizova.size(); i++){
             ArrayList listaI = (ArrayList) listaNizova.get(i);
@@ -155,8 +149,8 @@ starog niza. Matematickom indukcijom sledi da je tacno i za sve ostale primere. 
                 max = i;
             }
         }
-        return max;
+        return (ArrayList<Integer>) listaNizova.get(max);
     }
 
-
+ 
 }
