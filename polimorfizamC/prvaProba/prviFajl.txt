@@ -1,0 +1,3 @@
+Ovo je prvi fajl unutar source foldera.
+Ovo je njegova druga linija.
+Ovo je njegova treca linija.
