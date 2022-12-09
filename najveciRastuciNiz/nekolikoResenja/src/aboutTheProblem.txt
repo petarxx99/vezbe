@@ -1,0 +1,6 @@
+The problem is to find the longest growing array in a given array. For instance, let's say we have an array {50, 2, 10, 5, 6}
+the longest growing array is {2, 5, 6}.
+If the array is {3, 1, 2, 10, 11, 4, 7, 8} then the longest growing array is {1, 2, 4, 7, 8}.
+If the array is {1, 2, 10, 4, 5} then the longest growing array is {1, 2, 4, 5}.
+If the array is {4, -3, 5, -10, 150, 5, 6, 9} then the longest growing array is {4, 5, 6, 9}.
+The problem is to make a program which will find the longest growing array when given an arbitrary array of integers.
