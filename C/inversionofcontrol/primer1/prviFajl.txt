@@ -1,0 +1,3 @@
+Ovo je prvi fajl.
+Ovo je njegova druga linija.
+Ovaj fajl ce biti obradjen, neka slova ce biti prepravljena i novi fajl ce biti napravljen.
