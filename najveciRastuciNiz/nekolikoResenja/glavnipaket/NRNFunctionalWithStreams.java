@@ -1,6 +1,6 @@
-package engleski;
+package glavnipaket;
 
-import glavnipaket.NajveciNizInterfejs;
+
 
 import java.util.ArrayList;
 import java.util.Objects;
