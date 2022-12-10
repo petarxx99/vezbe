@@ -26,37 +26,38 @@ public class NRNFunctionalWithStreams implements NajveciNizInterfejs {
         return growingLists;
     }
 
-    public static ArrayList<ArrayList<Integer>> newListsAfterParsingTheNextNumber(ArrayList<ArrayList<Integer>> growingLists, final int NEXT_NUMBER){
+    public static ArrayList<ArrayList<Integer>> parseNewElement(int[] array,
+                                                                int currentIndex,
+                                                                ArrayList<ArrayList<Integer>> oldGrowingLists){
 
-        final ArrayList<ArrayList<Integer>> listsThatMapToThemselves = growingLists.stream()
+        ArrayList<ArrayList<Integer>> newGrowingLists = newListsAfterParsingTheNextNumber(
+                oldGrowingLists,
+                array[currentIndex]);
+
+        final int NEXT_INDEX = currentIndex + 1;
+        if(NEXT_INDEX < array.length){
+            newGrowingLists = parseNewElement(array, NEXT_INDEX, newGrowingLists);
+        }
+
+        return newGrowingLists;
+    }
+
+
+    public static ArrayList<ArrayList<Integer>> newListsAfterParsingTheNextNumber(ArrayList<ArrayList<Integer>> oldGrowingLists, final int NEXT_NUMBER){
+
+        final ArrayList<ArrayList<Integer>> listsThatMapToThemselves = oldGrowingLists.stream()
                 .filter(aGrowingList -> getLastElement(aGrowingList) >= NEXT_NUMBER)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        final ArrayList<ArrayList<Integer>> newLists = growingLists.stream()
+        final ArrayList<ArrayList<Integer>> newLists = oldGrowingLists.stream()
                 .map(aGrowingList -> createNewList(aGrowingList, NEXT_NUMBER))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        growingLists = copyList(listsThatMapToThemselves, listsThatMapToThemselves.size());
-        growingLists.addAll(newLists);
+        newLists.addAll(listsThatMapToThemselves);
 
-        growingLists.add(createList(NEXT_NUMBER));
-        return growingLists;
-    }
-
-    public static ArrayList<ArrayList<Integer>> parseNewElement(int[] array,
-                                                                int currentIndex,
-                                                                ArrayList<ArrayList<Integer>> growingLists){
-        if(currentIndex >= array.length) return growingLists;
-
-        growingLists = newListsAfterParsingTheNextNumber(growingLists, array[currentIndex]);
-
-        final int NEXT_INDEX = currentIndex + 1;
-        if(array.length > NEXT_INDEX){
-            growingLists = parseNewElement(array, NEXT_INDEX, growingLists);
-        }
-
-        return growingLists;
+        newLists.add(createList(NEXT_NUMBER));
+        return newLists;
     }
 
 
@@ -68,7 +69,7 @@ public class NRNFunctionalWithStreams implements NajveciNizInterfejs {
 The output of this function should be {1,3,4}, because that's the longest growing array that could be created
 from the input array with the number 4. If the new number is smaller than all the elements of the input array,
 then this function should return null, as no new growing array can be created with the number provided.*/
-    
+
     public static ArrayList<Integer> createNewList(ArrayList<Integer> oldList, int newElement){
         final int LAST_INDEX = oldList.size() -1;
 
