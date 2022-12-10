@@ -37,7 +37,7 @@ public class NRNFunctionalWithStreams implements NajveciNizInterfejs {
 
         final int NEXT_INDEX = currentIndex + 1;
         if(NEXT_INDEX < array.length){
-            newGrowingLists = parseNewElement(array, NEXT_INDEX, newGrowingLists);
+            return parseNewElement(array, NEXT_INDEX, newGrowingLists);
         }
 
         return newGrowingLists;
