@@ -23,7 +23,8 @@ public class NRNFunctionalWithStreams implements NajveciNizInterfejs {
     return growingLists;
      */
     public static ArrayList<ArrayList<Integer>> findAllGrowingLists(int[] array){
-        return parseNewElement(array, 0, new ArrayList<ArrayList<Integer>>());
+        final int START_INDEX = 0;
+        return parseNewElement(array, START_INDEX, new ArrayList<ArrayList<Integer>>());
     }
 
     public static ArrayList<ArrayList<Integer>> parseNewElement(int[] array,
