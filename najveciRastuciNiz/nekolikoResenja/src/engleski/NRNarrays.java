@@ -62,14 +62,14 @@ then this function should return null, as no new growing array can be created wi
         for(int i=LAST_INDEX; i>=0; i--){
             if(growingArray[i] < number){
                 final int NUMBER_OF_ELEMENTS_TO_COPY = i+1;
-                return copyArrayAndAddANumber(growingArray, NUMBER_OF_ELEMENTS_TO_COPY, number);
+                return copyPartOfAnArrayAndAppendANumberToIt(growingArray, NUMBER_OF_ELEMENTS_TO_COPY, number);
             }
         }
 
         return null;
     }
 
-    private static int[] copyArrayAndAddANumber(final int[] array,
+    private static int[] copyPartOfAnArrayAndAppendANumberToIt(final int[] array,
                                                 final int NUMBER_OF_ELEMENTS_TO_COPY,
                                                 final int NUMBER_TO_ADD){
         int[] newArray = new int[NUMBER_OF_ELEMENTS_TO_COPY + 1]; // +1 because I am adding another number.
