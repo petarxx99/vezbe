@@ -64,6 +64,11 @@ public class NRNFunctionalWithStreams implements NajveciNizInterfejs {
      * U suprotnom, trazi se poslednji clan liste koji je manji od drugog ulaznog parametra (nazovimo ga ,,clan X").
      *  Deo liste do clana X se kopira (zakljucno sa clanom X), te se kopiranoj listi dodaje drugi ulazni parametar.
      *  Metoda vraca takvu listu. */
+/* Imagine input being a growing array {1,3,10} and the new element being 4.
+The output of this function should be {1,3,4}, because that's the longest growing array that could be created
+from the input array with the number 4. If the new number is smaller than all the elements of the input array,
+then this function should return null, as no new growing array can be created with the number provided.*/
+    
     public static ArrayList<Integer> createNewList(ArrayList<Integer> oldList, int newElement){
         final int LAST_INDEX = oldList.size() -1;
 
