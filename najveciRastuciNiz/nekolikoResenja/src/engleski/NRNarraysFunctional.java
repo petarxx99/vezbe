@@ -66,14 +66,14 @@ public class NRNarraysFunctional implements NajveciNizInterfejs {
         for(int i=LAST_INDEX; i>=0; i--){
             if(growingArray[i] < number){
                 final int NUMBER_OF_ELEMENTS_TO_COPY = i+1;
-                return copyArrayAndAppendANumberToIt(growingArray, NUMBER_OF_ELEMENTS_TO_COPY, number);
+                return copyPartOfAnArrayAndAppendANumberToIt(growingArray, NUMBER_OF_ELEMENTS_TO_COPY, number);
             }
         }
 
         return null;
     }
 
-    private static int[] copyArrayAndAppendANumberToIt(final int[] array,
+    private static int[] copyPartOfAnArrayAndAppendANumberToIt(final int[] array,
                                                 final int NUMBER_OF_ELEMENTS_TO_COPY,
                                                 final int NUMBER_TO_ADD){
         int[] newArray = new int[NUMBER_OF_ELEMENTS_TO_COPY + 1]; // +1 because I am adding another number.
