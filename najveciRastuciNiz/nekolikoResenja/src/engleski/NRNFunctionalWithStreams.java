@@ -15,15 +15,15 @@ public class NRNFunctionalWithStreams implements NajveciNizInterfejs {
     }
 
 
+    /*
+    ArrayList<ArrayList<Integer>> growingLists = new ArrayList<>();
+    for(int i=0; i<array.length; i++){
+               growingLists = newListsAfterParsingTheNextNumber(growingLists, array[i]);
+    }
+    return growingLists;
+     */
     public static ArrayList<ArrayList<Integer>> findAllGrowingLists(int[] array){
-        ArrayList<ArrayList<Integer>> growingLists = new ArrayList<>();
-
- /*       for(int i=0; i<array.length; i++){
-            growingLists = newListsAfterParsingTheNextNumber(growingLists, array[i]);
-        } */
-        growingLists = parseNewElement(array, 0, growingLists);
-
-        return growingLists;
+        return parseNewElement(array, 0, new ArrayList<ArrayList<Integer>>());
     }
 
     public static ArrayList<ArrayList<Integer>> parseNewElement(int[] array,
