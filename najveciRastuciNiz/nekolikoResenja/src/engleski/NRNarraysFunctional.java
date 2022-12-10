@@ -34,7 +34,7 @@ public class NRNarraysFunctional implements NajveciNizInterfejs {
 
         final int NEXT_INDEX = CURRENT_INDEX + 1;
         if(NEXT_INDEX < array.length){
-            newGrowingArrays = parseNewElement(array, NEXT_INDEX, newGrowingArrays);
+            return parseNewElement(array, NEXT_INDEX, newGrowingArrays);
         }
 
         return newGrowingArrays;
