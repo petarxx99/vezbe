@@ -5,6 +5,8 @@
 #include"MozeProizvestiZvuk.h"
 #include"Automobil.h"
 
+void testirajInterfejsMozeProizvestiZvuk();
+void testirajPolimorfizamPsaZivotinje();
 
 int main(void)
 {
