@@ -25,6 +25,7 @@ void Dog_canMakeNoiseDestroyed(Dog *_this, void *deletedInterface){
            deletedInterface);
 }
 
+// Virtual methods
 CanMakeNoise* Dog_createCanMakeNoise(Dog *_this){
     if(isNullPointer(_this, "Dog_createCanMakeNoise")) return NULL;
 
@@ -39,7 +40,7 @@ CanMakeNoise* Dog_createCanMakeNoise(Dog *_this){
 }
 
 
-// Virtual methods
+
 void Dog_delete(Dog **addressToAPointerOfDogToDelete){
     if(isDoublePointerNull(addressToAPointerOfDogToDelete, "Dog_delete")) return;
     const char* dogName = (*addressToAPointerOfDogToDelete)->name;
