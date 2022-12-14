@@ -11,6 +11,7 @@ typedef struct {
     void (*destructor)(void **pointerToAnAnimal);
     void (*doSomething)(void *_this);
 
+    CanMakeNoise* (*createCanMakeNoise)(void *_this);
     void (*greetOwner)(void *_this);
 
 }DogVTable;
