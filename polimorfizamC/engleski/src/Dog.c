@@ -62,7 +62,7 @@ void Dog_greetOwner(Dog *_this){
     printf("Dog %s greets his owner %s. \n", _this->name, _this->owner);
 }
 
-const DogVTable DOG_VTABLE_GLOBAL = {Dog_delete, Dog_doSomething, Dog_greetOwner};
+const DogVTable DOG_VTABLE_GLOBAL = {Dog_delete, Dog_doSomething, Dog_createCanMakeNoise, Dog_greetOwner};
 
 
 Dog* Dog_new(const char *name, int age, const char *owner, const char *breed){
