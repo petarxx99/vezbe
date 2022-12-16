@@ -33,7 +33,10 @@ void testAnimalDogUpcasting(){
     printf("%s is %d years old. \n", animal->name, animal->age);
     animal->vTable->doSomething(animal);
 
-    Dog *dog = Dog_new("asd", 20, "John", "Saf");
+    Dog *dog = Dog_new("Belly", 20, "John", "shepherd");
+    if(Animal_isOlderThanAnAnimal(dog, dogUpcastedToAnimal)){
+        printf("%s is older than %s. \n", dog->name, dogUpcastedToAnimal->name);
+    }
     dog->vTable->destructor(&dog);
     dogUpcastedToAnimal->vTable->destructor(&dogUpcastedToAnimal);
     animal->vTable->destructor(&animal);

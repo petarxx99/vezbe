@@ -15,7 +15,7 @@ void Animal_delete(Animal **addressOfAnimalPointer){
 void Animal_doSomething(Animal *_this){
     if(isNullPointer(_this, "Animal_doSomething")) return;
 
-    printf("Animal %s of age %d does something", _this->name, _this->age);
+    printf("Animal %s of age %d does something. \n", _this->name, _this->age);
 }
 
 AnimalVTable ANIMAL_VTABLE_GLOBAL = {Animal_delete, Animal_doSomething};
