@@ -3,7 +3,7 @@
 
 bool isNullPointer(void *pointer, const char *functionName){
     if(pointer == NULL){
-        printf("%s has received a NULL pointer. \n", functionName, stderr);
+        fprintf(stderr, "%s has received a NULL pointer. \n", functionName);
         return true;
     }
 
@@ -11,14 +11,12 @@ bool isNullPointer(void *pointer, const char *functionName){
 }
 
 bool isDoublePointerNull(void **doublePointer, const char *functionName){
-    if(!isNullPointer(doublePointer, functionName)){
-        if(*doublePointer == NULL){
-            printf("%s has received a double pointer which is pointing to a NULL pointer. \n", functionName, stderr);
-            return true;
-        }
+    if(isNullPointer(doublePointer, functionName)) return true;
 
-        return false;
+    if(*doublePointer == NULL){
+            fprintf(stderr, "%s has received a double pointer which is pointing to a NULL pointer. \n", functionName);
+            return true;
     }
 
-    return true;
+    return false;
 }
