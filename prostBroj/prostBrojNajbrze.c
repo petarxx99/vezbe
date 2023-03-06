@@ -40,7 +40,7 @@ void prostBroj(unsigned int broj){
 int main(){
 
   unsigned int dokle;
-  printf("Do kog broja treba da izracunam proste brojeve: ");
+  printf("Do kog broja treba da izracunam proste brojeve (up to which number to calculate primes): ");
   scanf("%u", &dokle);
   prostiBrojevi = (unsigned int*) calloc(4, dokle*4/10);
   prostiBrojevi[0] = 2;
